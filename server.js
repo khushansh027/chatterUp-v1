@@ -1,17 +1,22 @@
-// Import required modules
 import express from 'express';
 import http from 'http';
 import { Server } from 'socket.io';
 import Chat from './chatter.schema.js';
 import cors from 'cors';
-// app.use(cors());
 import path from 'path';
+import { fileURLToPath } from 'url';
 
-// Express app and configure middleware
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 export const app = express();
-
-// HTTP server using Express app
 export const server = http.createServer(app);
+
+app.use(express.json());
+app.use(cors());
+
+// serve static frontend
+app.use(express.static(path.join(__dirname, "public")));
 
 // Initialize Socket.IO server with custom configurations
 const io = new Server(server, {
