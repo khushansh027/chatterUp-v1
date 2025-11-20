@@ -1,4 +1,5 @@
 import io from "socket.io-client";
+const { SOCKET_SERVER_URL } = process.env;
 // Establish socket connection
 const socket = io.connect(SOCKET_SERVER_URL || "http://localhost:4500");
 
@@ -277,3 +278,4 @@ function loadOldMessages() {
     console.log("Updated message list content:", messageList.innerHTML); //debug
 
 }
+
