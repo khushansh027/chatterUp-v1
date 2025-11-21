@@ -218,7 +218,7 @@ socket.on("newMessage", (newMessage) => {
         console.error("Message list element not found!");
         return;
     }
-    console.log("CLIENT RECEIVED:", msg);
+    console.log("CLIENT RECEIVED:", newMessage);
     
     // Determine if the message is sent by the current user
     const isUserMessage = newMessage.name === sanitizeInput(name.value.trim());
@@ -277,4 +277,5 @@ function loadOldMessages() {
     
     messageList.appendChild(msgDiv);
     console.log("Updated message list content:", messageList.innerHTML); //debug
+
 }
