@@ -70,7 +70,7 @@ myPrompt.addEventListener("submit", (event) => {
 
 // Typing indicator
 messageInput.addEventListener("input", () => {
-  socket.emit("typing", name.value.trim());
+  socket.emit("typing", socket.id);
 });
 
 // Prevent sending empty messages and send messages if not empty
@@ -163,7 +163,7 @@ socket.on("typing", (userId) => {
 });
 
 // Display old messages to the new joinee
-socket.on("joined", (oldMessages) => {
+/*socket.on("joined", (oldMessages) => {
     
     const messageList = document.getElementById("message-list");
   
@@ -173,8 +173,8 @@ socket.on("joined", (oldMessages) => {
     }
 
     // Map to assign user images and cycle through them
-    const userImageMap = new Map();
-    let imageIndex = 1;
+    // const userImageMap = new Map();
+    // let imageIndex = 1;
 
     oldMessages.forEach((msg) => {
         const msgDiv = document.createElement("div");
@@ -206,7 +206,48 @@ socket.on("joined", (oldMessages) => {
     });
 
     scrollToBottom();
+});*/
+
+socket.on("joined", (oldMessages) => {
+  const messageList = document.getElementById("message-list");
+
+  if (!messageList) {
+    console.error("Message list element not found!");
+    return;
+  }
+
+  oldMessages.forEach((msg) => {
+    const msgDiv = document.createElement("div");
+
+    // Assign image if not already stored
+    if (!userImageMap.has(msg.name)) {
+      if (imageIndex > 4) imageIndex = 1;
+      userImageMap.set(msg.name, imageIndex++);
+    }
+
+    const assignedImageIndex = userImageMap.get(msg.name);
+
+    const userImage = assignedImageIndex
+      ? `/images/${assignedImageIndex}.jpg`
+      : "/images/default.jpg";
+
+    msgDiv.innerHTML = `
+      <div class="message-block">
+        <img src="${userImage}" alt="User Image" />
+        <div class="message-content">
+          <p class="name" style="margin-bottom: 15px;">${sanitizeInput(msg.name)}</p>
+          <p class="message">${sanitizeInput(msg.message)}</p>
+          <p class="timestamp">${msg.time}</p>
+        </div>
+      </div>
+    `;
+    
+    messageList.appendChild(msgDiv);
+  });
+
+  scrollToBottom();
 });
+
 
 // Display new messages
 socket.on("newMessage", (newMessage) => {
@@ -219,7 +260,7 @@ socket.on("newMessage", (newMessage) => {
         return;
     }
     console.log("CLIENT RECEIVED:", newMessage);
-    
+
     // Determine if the message is sent by the current user
     const isUserMessage = newMessage.name === sanitizeInput(name.value.trim());
     
@@ -277,5 +318,4 @@ function loadOldMessages() {
     
     messageList.appendChild(msgDiv);
     console.log("Updated message list content:", messageList.innerHTML); //debug
-
 }
