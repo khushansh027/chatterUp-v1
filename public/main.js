@@ -218,6 +218,7 @@ socket.on("newMessage", (newMessage) => {
         console.error("Message list element not found!");
         return;
     }
+    console.log("CLIENT RECEIVED:", msg);
     
     // Determine if the message is sent by the current user
     const isUserMessage = newMessage.name === sanitizeInput(name.value.trim());
