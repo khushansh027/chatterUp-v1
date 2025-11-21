@@ -1,11 +1,11 @@
 // public/main.js (client-side, loaded in browser)
-const SOCKET_SERVER_URL = window.SOCKET_SERVER_URL || "http://localhost:4500";
+const SOCKET_SERVER_URL = window.SOCKET_SERVER_URL || "";
 // If you included socket.io client via CDN, `io` is already available as a global
 const socket = io(SOCKET_SERVER_URL);
 
 // Handle connection errors
 socket.on("connect_error", (err) => {
-    console.error("Socket error:", err);
+  console.error("Socket error:", err);
 });
 
 // Add this function below the socket connection code
@@ -130,8 +130,8 @@ socket.on("onlineUser", (users) => {
         const assignedImageIndex = userImageMap.get(user.name);
         
         const userImage = assignedImageIndex
-        ? `public/images/${assignedImageIndex}.jpg`
-        : "public/images/default.jpg";
+        ? `/images/${assignedImageIndex}.jpg`
+        : "/images/default.jpg";
 
         
         const userDiv = document.createElement("div");
@@ -187,8 +187,8 @@ socket.on("joined", (oldMessages) => {
 
         const assignedImageIndex = userImageMap.get(msg.name);
         const userImage = assignedImageIndex
-        ? `public/images/${assignedImageIndex}.jpg`
-        : "public/images/default.jpg";
+        ? `/images/${assignedImageIndex}.jpg`
+        : "/images/default.jpg";
 
         msgDiv.innerHTML = `
                 <div class="message-block">
@@ -224,8 +224,8 @@ socket.on("newMessage", (newMessage) => {
     
     // Set the user image based on whether the message is from the current user or others
     const userImage = isUserMessage
-    ? "public/images/1.jpg" // Assuming "1.jpg" for the current user
-    : "public/images/2.jpg"; // Default for other users
+    ? "/images/1.jpg" // Assuming "1.jpg" for the current user
+    : "/images/2.jpg"; // Default for other users
 
     // Create a new div element for the message block
     const msgDiv = document.createElement("div");
@@ -253,7 +253,7 @@ socket.on("newMessage", (newMessage) => {
     
     // Play notification sound if the message is not from the current user
     if (!isUserMessage) {
-        const notificationSound = new Audio("public/notifications/msgTune.mp3");
+        const notificationSound = new Audio("/notifications/msgTune.mp3");
         notificationSound.play().catch((err) => console.error("Sound error:", err));
     }
 });
