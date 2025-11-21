@@ -50,7 +50,11 @@ io.on("connection", (socket) => {
             onlineUser.push({ id: socket.id, name: name.trim() });
             console.log("Current online users:", onlineUser);
             // Notify everyone of the updated user list
-            io.emit("onlineUser", onlineUser);
+            io.emit("newMessage", {
+                name: savedMessage.name,
+                message: savedMessage.message,
+                time: savedMessage.time,
+            });
             // Send old messages only to the joining user
             socket.emit("joined", oldMessage);
         } catch (error) {
